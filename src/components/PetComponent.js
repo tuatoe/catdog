@@ -14,7 +14,6 @@ var btnStyle = {
     marginLeft: '5px',
     marginRight:'5px'
 }
-
 class PetComponent extends React.Component {
     constructor(props){
         super(props);
@@ -46,7 +45,6 @@ class PetComponent extends React.Component {
          this.likesCount -= 1;
          this.forceUpdate();
     }
-    
     render(){
         return(
             <div style={compStyle}>
