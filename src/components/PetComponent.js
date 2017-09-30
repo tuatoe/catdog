@@ -17,38 +17,34 @@ var btnStyle = {
 class PetComponent extends React.Component {
     constructor(props){
         super(props);
-//        this.state = {
-//          likesCount: 0
-//        };
-        this.likesCount = 0;
+        this.state = {
+          likesCount: 0
+        };
         this.handleLikeBtnClick = this.handleLikeBtnClick.bind(this);
         this.handleDislikeBtnClick = this.handleDislikeBtnClick.bind(this);
     }
     
      handleLikeBtnClick(){
-         
-        console.log(this.props.petName + 'like btn click');
-//         this.setState({
-//             likesCount: this.state.likesCount + 1
-//         });
-         
-         this.likesCount += 1;
-         this.forceUpdate();
+         this.setState(function(prevState){
+             return {
+                 likesCount: prevState.likesCount + 1
+             };
+         });
     }
     
     handleDislikeBtnClick(){
-        console.log(this.props.petName + 'dislike btn clicked')
-//        this.setState({
-//            likesCount: this.state.likesCount - 1
-//        });
-        
-         this.likesCount -= 1;
-         this.forceUpdate();
+        this.setState(function(prevState){
+             return {
+                 likesCount: prevState.likesCount - 1
+             };
+         });
     }
     render(){
+                 console.log('Inside render method: ', this.state.likeCount);
+
         return(
             <div style={compStyle}>
-                <h3>{this.props.petName} Likes: {this.likesCount}</h3>
+                <h3>{this.props.petName} Likes: {this.state.likesCount}</h3>
             
                 <img style={{height:300,width:300}} src={this.props.petImageUrl} alt={this.props.petName} />
             
