@@ -1,4 +1,6 @@
+
 var React = require('react');
+var axios = require('axios');
 var PetComponent = require('./PetComponent');
 
 var style = {
@@ -12,53 +14,95 @@ var btnStyle = {
     marginRight: '5px',
     height: '25px'
 };
+var API_KEY = '123456789';
+var CAT_URL = 'http://localhost:63000/cat/?api_key='+API_KEY;
+var DOG_URL = 'http://localhost:63000/dog/?api_key='+API_KEY;
 
 class HomePage extends React.Component {
     constructor(props){
         super(props);
           this.state = {
-             cat: {likesCount: 0, result: ''},
-             dog: {likesCount: 0, result: ''}
+             cat: {likesCount: 0, result: '', image: ''},
+             dog: {likesCount: 0, result: '', image: ''}
           };
           this.handleLikeBtnClick = this.handleLikeBtnClick.bind(this);
           this.handleDislikeBtnClick = this.handleDislikeBtnClick.bind(this);
           this.handleShowWinnerBtnClick = this.handleShowWinnerBtnClick.bind(this);
           this.handleStartOverBtnClick = this.handleStartOverBtnClick.bind(this);
+        
     }
     
+ 
+    componentDidMount(){
+       this.fetchCatImage();
+    }
+    
+    fetchCatImage(){
+         axios.get(CAT_URL)
+        .then(function(resp){
+            var imageUrl = resp.data.imageUrl;
+             
+             this.setState(function(prevState){
+                 return {
+                     cat:{likesCount: prevState.cat.likesCount, result: prevState.cat.result, imageUrl: imageUrl}
+                 };
+             });
+        }.bind(this));
+    }
+    
+    fetchDogImage(){
+         axios.get(DOG_URL)
+        .then(function(resp){
+            var imageUrl = resp.data.imageUrl;
+             
+             this.setState(function(prevState){
+                 return {
+                     dog:{likesCount: prevState.dog.likesCount, result: prevState.dog.result, imageUrl: imageUrl}
+                 };
+             });
+        }.bind(this));
+    }
+    
+    fetchImages(){
+        this.fetchCatImage();
+        this.fetchDogImage();
+    }
       handleLikeBtnClick(event){
+          this.fetchImages();
           var petName = event.target.value;
           if(petName === 'Cat'){
               this.setState(function(prevState){
                   return {
-                      //catLikesCount: prevState.catLikesCount + 1
-                      cat:{ likesCount: prevState.cat.likesCount + 1, result: prevState.cat.result }
+                    
+                      cat:{ likesCount: prevState.cat.likesCount + 1, result: prevState.cat.result,imageUrl: prevState.cat.imageUrl  }
                   };
               });
           }else if(petName === "Dog"){
                this.setState(function(prevState){
                   return {
-                      //dogLikesCount: prevState.dogLikesCount + 1
-                       dog:{ likesCount: prevState.dog.likesCount + 1, result: prevState.dog.result }
+                     
+                       dog:{ likesCount: prevState.dog.likesCount + 1, result: prevState.dog.result,imageUrl: prevState.dog.imageUrl }
                   };
               });
           }
     }
     
+    
     handleDislikeBtnClick(event){
+        this.fetchImages();
         var petName = event.target.value
          if(petName === 'Cat'){
               this.setState(function(prevState){
                   return {
                     
-                       cat:{ likesCount: prevState.cat.likesCount - 1, result: prevState.cat.result }
+                       cat:{ likesCount: prevState.cat.likesCount - 1, result: prevState.cat.result,imageUrl: prevState.cat.imageUrl }
                   };
               });
           }else if(petName === "Dog"){
                this.setState(function(prevState){
                   return {
                    
-                       dog:{ likesCount: prevState.dog.likesCount - 1, result: prevState.dog.result }
+                       dog:{ likesCount: prevState.dog.likesCount - 1, result: prevState.dog.result,imageUrl: prevState.dog.imageUrl }
                   };
               });
           }
@@ -80,20 +124,23 @@ class HomePage extends React.Component {
         
        this.setState(function(prevState){
            return {
-               cat:{ likesCount: prevState.cat.likesCount, result: catResult },
-               dog:{ likesCount: prevState.dog.likesCount, result: dogResult }
+               cat:{ likesCount: prevState.cat.likesCount, result: catResult, imageUrl: prevState.cat.imageUrl },
+               dog:{ likesCount: prevState.dog.likesCount, result: dogResult, imageUrl: prevState.dog.imageUrl }
            };
        });
     }
     
 
     handleStartOverBtnClick(){
+        this.fetchImages();
       this.setState({
-        cat: {likesCount: 0, result: ''},
-        dog: {likesCount: 0, result: ''}
+        cat: {likesCount: 0, result: '', imageUrl: ''},
+        dog: {likesCount: 0, result: '', imageUrl: ''},
+          
       });
     }
     render(){
+     
         return (
        <div>
          <h1 style={style}>
@@ -103,7 +150,7 @@ class HomePage extends React.Component {
             <PetComponent 
             petName = "Cat" 
             likesCount = {this.state.cat.likesCount}
-            petImageUrl="https://i.pinimg.com/736x/88/50/2b/88502b58b2ca3509be47473044fde8cc--wink-wink-adorable-animals.jpg"
+            petImageUrl={this.state.cat.imageUrl}
             result= {this.state.cat.result}
             onLikeBtnClick = {this.handleLikeBtnClick}
             onDislikeBtnClick = {this.handleDislikeBtnClick}
@@ -111,7 +158,7 @@ class HomePage extends React.Component {
             <PetComponent 
             petName = "Dog" 
             likesCount = {this.state.dog.likesCount}
-            petImageUrl="https://i.ytimg.com/vi/opKg3fyqWt4/hqdefault.jpg"
+            petImageUrl={this.state.dog.imageUrl}
             result={this.state.dog.result}
             onLikeBtnClick = {this.handleLikeBtnClick}
             onDislikeBtnClick = {this.handleDislikeBtnClick}

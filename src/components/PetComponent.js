@@ -20,7 +20,7 @@ var PetComponent = function(props){
     
 
     if(props.result !== ''){
-        var resultStyle = null;
+        var resultStyle = { };
         
         if(props.result === 'Loser'){
          resultStyle = {color: 'red'};
