@@ -44,12 +44,12 @@ app.get('/:petname', function(req, res, next) {
     return;
   }
 
-  if(petName === 'dog') {
+  if(petName === DOG) {
     const randImgNumber = Date.now() % dogImages.length;
     petImageName = dogImages[randImgNumber];
     found = true;
   }
-  else if(petName === 'cat') {
+  else if(petName === CAT) {
     const randImgNumber = Date.now() % catImages.length;
     petImageName = catImages[randImgNumber];
     found = true;

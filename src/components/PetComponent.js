@@ -1,4 +1,5 @@
 var React = require('react');
+var constants = require('../constants');
 
 //dog component 
 var compStyle = {
@@ -14,6 +15,9 @@ var btnStyle = {
     marginLeft: '5px',
     marginRight:'5px'
 }
+var LOSER = constants.LOSER;
+var CUTE = constants.CUTE;
+
 var PetComponent = function(props){
     var result = null;
     var disabled = false;
@@ -22,7 +26,7 @@ var PetComponent = function(props){
     if(props.result !== ''){
         var resultStyle = { };
         
-        if(props.result === 'Loser'){
+        if(props.result === LOSER){
          resultStyle = {color: 'red'};
         }else{
             resultStyle = {color: 'green'};
@@ -40,7 +44,7 @@ var PetComponent = function(props){
         ) : (
             <h3>{props.petName}</h3>
         )}
-        <img style={{height:300,width:300}} src={props.petImageUrl} alt={props.petName} />
+        <img style={{height:300,width:300}} src={props.petImageUrl} alt={CUTE + ' ' + props.petName} />
 
         <br/>
 
